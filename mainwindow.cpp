@@ -64,14 +64,6 @@ void MainWindow::loadSettings() {
     restoreState(settings.value("State").toByteArray());
 }
 
-void DrawPixel(uint16_t X, uint16_t Y, uint32_t RGB_Code) {
-    lcd->setPixel(X, Y, RGB_Code);
-}
-
-void DrawPixel(uint16_t X, uint16_t Y) {
-    lcd->setPixel(X, Y);
-}
-
 class CalcBrezCircle {
     int32_t D;
     uint32_t curX;
@@ -105,14 +97,14 @@ void DrawCircle(uint16_t X, uint16_t Y, uint16_t Radius) {
     CalcBrezCircle calc { Radius };
 
     while (calc) {
-        DrawPixel((X + calc.x()), (Y + calc.y()) /*, Qt::white*/);
-        DrawPixel((X + calc.x()), (Y - calc.y()) /*, Qt::white*/);
-        DrawPixel((X + calc.y()), (Y + calc.x()) /*, Qt::white*/);
-        DrawPixel((X + calc.y()), (Y - calc.x()) /*, Qt::white*/);
-        DrawPixel((X - calc.x()), (Y + calc.y()) /*, Qt::white*/);
-        DrawPixel((X - calc.x()), (Y - calc.y()) /*, Qt::white*/);
-        DrawPixel((X - calc.y()), (Y + calc.x()) /*, Qt::white*/);
-        DrawPixel((X - calc.y()), (Y - calc.x()) /*, Qt::white*/);
+        lcd->setPixel((X + calc.x()), (Y + calc.y()) /*, Qt::white*/);
+        lcd->setPixel((X + calc.x()), (Y - calc.y()) /*, Qt::white*/);
+        lcd->setPixel((X + calc.y()), (Y + calc.x()) /*, Qt::white*/);
+        lcd->setPixel((X + calc.y()), (Y - calc.x()) /*, Qt::white*/);
+        lcd->setPixel((X - calc.x()), (Y + calc.y()) /*, Qt::white*/);
+        lcd->setPixel((X - calc.x()), (Y - calc.y()) /*, Qt::white*/);
+        lcd->setPixel((X - calc.y()), (Y + calc.x()) /*, Qt::white*/);
+        lcd->setPixel((X - calc.y()), (Y - calc.x()) /*, Qt::white*/);
 
         calc();
     }
@@ -197,7 +189,7 @@ void DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t* buf 
         if (buf)
             buf[y] = x;
         else
-            DrawPixel(x, y); /* Draw the current pixel */
+            lcd->setPixel(x, y); /* Draw the current pixel */
         num += numadd; /* Increase the numerator by the top of the fraction */
         if (num >= den) /* Check if numerator >= denominator */
         {

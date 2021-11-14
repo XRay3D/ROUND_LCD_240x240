@@ -34,13 +34,18 @@ public:
         pixmap[x][y] = currentColor_;
         update();
     }
-    void clear() { pixmap = {}; }
+
+    void clear() {
+        pixmap = {};
+        update();
+    }
 
     void drawHLine(uint16_t x, uint16_t y, uint8_t lenght) { //NOTE DMA frendly
         while (lenght--)
             pixmap[x++][y] = currentColor_;
         update();
     };
+
     void drawVLine(uint16_t x, uint16_t y, uint8_t lenght) { //NOTE DMA frendly
         while (lenght--)
             pixmap[x][y++] = currentColor_;
