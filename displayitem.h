@@ -21,32 +21,42 @@ public:
 
     explicit DisplayItem();
 
-    Color pixel(int x, int y) const {
+    Color pixel(int x, int y) const
+    {
         return pixmap[x][y];
     }
 
-    void setPixel(int x, int y, Color color) {
+    void setPixel(int x, int y, Color color)
+    {
         pixmap[x][y] = color;
         update();
     }
 
-    void setPixel(int x, int y) {
+    void setPixel(int x, int y)
+    {
         pixmap[x][y] = currentColor_;
         update();
     }
 
-    void clear() {
+    void clear()
+    {
         pixmap = {};
         update();
     }
 
-    void drawHLine(uint16_t x, uint16_t y, uint8_t lenght) { //NOTE DMA frendly
+    void drawHLine(uint16_t x, uint16_t y, uint8_t lenght)
+    { //NOTE DMA frendly
+        if (!lenght)
+            return;
         while (lenght--)
             pixmap[x++][y] = currentColor_;
         update();
     };
 
-    void drawVLine(uint16_t x, uint16_t y, uint8_t lenght) { //NOTE DMA frendly
+    void drawVLine(uint16_t x, uint16_t y, uint8_t lenght)
+    { //NOTE DMA frendly
+        if (!lenght)
+            return;
         while (lenght--)
             pixmap[x][y++] = currentColor_;
         update();
