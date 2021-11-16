@@ -1,7 +1,8 @@
-#include "displayitem.h"
+#include "lcd.h"
 
 #include <QPainter>
 constexpr auto k = 0.5;
+
 
 DisplayItem::DisplayItem()
     : QGraphicsItem() {
