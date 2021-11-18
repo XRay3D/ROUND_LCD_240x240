@@ -27,14 +27,23 @@ extern "C" void HAL_Delay(uint32_t d) // NOTE Without blocing GUI Thread
     loop.exec();
 }
 
+uint16_t R = 120;
+uint16_t K = 40;
+
+ArcProgressBar ark[] {
+    { 120, 120, static_cast<uint16_t>(R), static_cast<uint16_t>((R -= K) + 5) },
+    { 120, 120, static_cast<uint16_t>(R), static_cast<uint16_t>((R -= K) + 5) },
+    { 120, 120, static_cast<uint16_t>(R), static_cast<uint16_t>((R -= K) + 5) },
+};
+
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
-    connect(new QShortcut(Qt::Key_A, this), &QShortcut::activated, [this] { LCD.clear(), ui->horizontalSlider->setValue(ui->horizontalSlider->value() - 1); });
-    connect(new QShortcut(Qt::Key_D, this), &QShortcut::activated, [this] { LCD.clear(), ui->horizontalSlider->setValue(ui->horizontalSlider->value() + 1); });
+    connect(new QShortcut(Qt::Key_A, this), &QShortcut::activated, [this] { LCD.clear(), ui->hslArc1->setValue(ui->hslArc1->value() - 1); });
+    connect(new QShortcut(Qt::Key_D, this), &QShortcut::activated, [this] { LCD.clear(), ui->hslArc1->setValue(ui->hslArc1->value() + 1); });
 
     auto toolBar = addToolBar("Zoom");
 
@@ -55,6 +64,12 @@ MainWindow::MainWindow(QWidget* parent)
     loadSettings();
 
     QTimer::singleShot(100, this, ST7789_Test);
+
+    connect(ui->pbTest, &QAbstractButton::clicked, ST7789_Test);
+
+    connect(ui->hslArc1, &QAbstractSlider::valueChanged, [](int value) { ark[0].setValue(value); });
+    connect(ui->hslArc2, &QAbstractSlider::valueChanged, [](int value) { ark[1].setValue(value); });
+    connect(ui->hslArc3, &QAbstractSlider::valueChanged, [](int value) { ark[2].setValue(value); });
 
     //startTimer(1);
 }
@@ -82,15 +97,6 @@ void MainWindow::loadSettings()
     restoreState(settings.value("State").toByteArray());
 }
 
-uint16_t R = 120;
-uint16_t K = 40;
-
-ArcProgressBar ark[] {
-    { 120, 120, static_cast<uint16_t>(R), static_cast<uint16_t>((R -= K) + 5) },
-    { 120, 120, static_cast<uint16_t>(R), static_cast<uint16_t>((R -= K) + 5) },
-    { 120, 120, static_cast<uint16_t>(R), static_cast<uint16_t>((R -= K) + 5) },
-};
-
 void MainWindow::initArcs()
 {
     LCD.setCurrentColor(1, Qt::red);
@@ -108,19 +114,15 @@ void MainWindow::initArcs()
     }
 }
 
-void MainWindow::on_horizontalSlider_valueChanged(int value) { ark[0].setValue(value); }
-void MainWindow::on_horizontalSlider_2_valueChanged(int value) { ark[1].setValue(value); }
-void MainWindow::on_horizontalSlider_3_valueChanged(int value) { ark[2].setValue(value); }
-
 void MainWindow::timerEvent(QTimerEvent* /*event*/)
 {
     LCD.clear();
-    ui->horizontalSlider->setValue((ui->horizontalSlider->value() + 1) % 180);
+    ui->hslArc1->setValue((ui->hslArc1->value() + 1) % 180);
     // static std::default_random_engine e1({});
     // static std::uniform_int_distribution<int> uniform_dist(0, 180);
     // static int mean;
     // mean = uniform_dist(e1) * 0.05 + mean * 0.95;
-    // ui->horizontalSlider_2->setValue(mean);
+    // ui->hslArc2->setValue(mean);
 
     // ark[0].setValue(int(ark[0].value() + 1) % 180);
     // ark[1].setValue(int(ark[0].value() + 2) % 180);

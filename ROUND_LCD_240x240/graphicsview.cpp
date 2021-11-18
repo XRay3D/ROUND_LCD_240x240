@@ -9,7 +9,6 @@ GraphicsView::GraphicsView(QWidget* parent)
     setScene(new QGraphicsScene());
     scene()->addItem(&LCD);
     scene()->setBackgroundBrush(Qt::black);
-    setDragMode(ScrollHandDrag);
 }
 
 void GraphicsView::zoomFit() { fitInView(scene()->items().front(), Qt::KeepAspectRatio); }
@@ -25,7 +24,7 @@ void GraphicsView::zoomOut() { scale(outScaleFactor, outScaleFactor); }
 void GraphicsView::setGridVisible(bool fl)
 {
     grid = fl;
-    updateScene({LCD.boundingRect()});
+    updateScene({ LCD.boundingRect() });
 }
 
 void GraphicsView::drawForeground(QPainter* painter, const QRectF& /*rect*/)
@@ -45,3 +44,25 @@ void GraphicsView::drawForeground(QPainter* painter, const QRectF& /*rect*/)
     for (int y = top; y < bottom; ++y)
         painter->drawLine(left, y, right, y);
 }
+
+void GraphicsView::mousePressEvent(QMouseEvent* event)
+{
+    setDragMode(ScrollHandDrag);
+    QGraphicsView::mousePressEvent(event);
+}
+
+void GraphicsView::mouseReleaseEvent(QMouseEvent* event)
+{
+    QGraphicsView::mouseReleaseEvent(event);
+    setDragMode(NoDrag);
+}
+
+//void GraphicsView::mouseDoubleClickEvent(QMouseEvent* event)
+//{
+//    QGraphicsView::mouseDoubleClickEvent(event);
+//}
+
+//void GraphicsView::mouseMoveEvent(QMouseEvent* event)
+//{
+//    QGraphicsView::mouseMoveEvent(event);
+//}

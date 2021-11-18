@@ -19,7 +19,14 @@
      <widget class="GraphicsView" name="graphicsView"/>
     </item>
     <item>
-     <widget class="QSlider" name="horizontalSlider">
+     <widget class="QPushButton" name="pbTest">
+      <property name="text">
+       <string>PushButton</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSlider" name="hslArc1">
       <property name="minimum">
        <number>0</number>
       </property>
@@ -41,7 +48,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QSlider" name="horizontalSlider_2">
+     <widget class="QSlider" name="hslArc2">
       <property name="minimum">
        <number>0</number>
       </property>
@@ -63,7 +70,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QSlider" name="horizontalSlider_3">
+     <widget class="QSlider" name="hslArc3">
       <property name="minimum">
        <number>0</number>
       </property>
@@ -106,7 +113,7 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>horizontalSlider</tabstop>
+  <tabstop>hslArc1</tabstop>
   <tabstop>graphicsView</tabstop>
  </tabstops>
  <resources/>

@@ -47,7 +47,7 @@ void ST7789_Test(void)
 {
     UG_FillScreen(C_WHITE);
     ST7789_PutStr(10, 10, "Starting Test", DEFAULT_FONT, C_RED, C_WHITE);
-    HAL_Delay(100);
+    HAL_Delay(500);
 
     uint8_t r = 0, g = 0, b = 0;
     for (r = 0; r < 32; r++) { // R++, G=0, B=0
@@ -84,19 +84,19 @@ void ST7789_Test(void)
     }
 
     UG_FillScreen(C_RED);
-    HAL_Delay(100);
+    HAL_Delay(500);
     UG_FillScreen(C_GREEN);
-    HAL_Delay(100);
+    HAL_Delay(500);
     UG_FillScreen(C_BLUE);
-    HAL_Delay(100);
+    HAL_Delay(500);
     UG_FillScreen(C_BLACK);
-    HAL_Delay(100);
+    HAL_Delay(500);
 
     clearTime();
     UG_FillScreen(C_WHITE);
     printTime();
     ST7789_PutStr(10, 10, "Fill Time", DEFAULT_FONT, C_RED, C_WHITE);
-    HAL_Delay(100);
+    HAL_Delay(500);
 
     UG_FillScreen(C_BLACK);
     ST7789_PutStr(10, 10, "Font test.", DEFAULT_FONT, C_AZURE, C_BLACK);
@@ -106,7 +106,7 @@ void ST7789_Test(void)
     ST7789_PutStr(10, 85, "Hello Steve!", DEFAULT_FONT, C_LIME_GREEN, C_BLACK);
     ST7789_PutStr(10, 110, "Hello Steve!", DEFAULT_FONT, C_HOT_PINK, C_BLACK);
     printTime();
-    HAL_Delay(100);
+    HAL_Delay(500);
 
     UG_FillScreen(C_RED);
     ST7789_PutStr(10, 10, "Line.", DEFAULT_FONT, C_YELLOW, C_RED);
@@ -115,56 +115,56 @@ void ST7789_Test(void)
     UG_DrawLine(30, 40, 100, 40, C_WHITE);
     UG_DrawLine(30, 40, 100, 110, C_WHITE);
     printTime();
-    HAL_Delay(100);
+    HAL_Delay(500);
 
     UG_FillScreen(C_RED);
     ST7789_PutStr(10, 10, "Rect.", DEFAULT_FONT, C_YELLOW, C_RED);
     clearTime();
     UG_DrawFrame(30, 40, 100, 110, C_WHITE);
     printTime();
-    HAL_Delay(100);
+    HAL_Delay(500);
 
     UG_FillScreen(C_RED);
     ST7789_PutStr(10, 10, "Filled Rect.", DEFAULT_FONT, C_YELLOW, C_RED);
     clearTime();
     UG_FillFrame(30, 40, 100, 110, C_WHITE);
     printTime();
-    HAL_Delay(100);
+    HAL_Delay(500);
 
     UG_FillScreen(C_RED);
     ST7789_PutStr(10, 10, "Mesh.", DEFAULT_FONT, C_YELLOW, C_RED);
     clearTime();
     UG_DrawMesh(30, 40, 100, 110, C_WHITE);
     printTime();
-    HAL_Delay(100);
+    HAL_Delay(500);
 
     UG_FillScreen(C_RED);
     ST7789_PutStr(10, 10, "Circle.", DEFAULT_FONT, C_YELLOW, C_RED);
     clearTime();
     UG_DrawCircle(75, 75, 35, C_WHITE);
     printTime();
-    HAL_Delay(100);
+    HAL_Delay(500);
 
     UG_FillScreen(C_RED);
     ST7789_PutStr(10, 10, "Filled Cir.", DEFAULT_FONT, C_YELLOW, C_RED);
     clearTime();
     UG_FillCircle(75, 75, 35, C_WHITE);
     printTime();
-    HAL_Delay(100);
+    HAL_Delay(500);
 
     UG_FillScreen(C_RED);
     ST7789_PutStr(10, 10, "Triangle.", DEFAULT_FONT, C_YELLOW, C_RED);
     clearTime();
     UG_DrawTriangle(30, 40, 120, 40, 60, 120, C_WHITE);
     printTime();
-    HAL_Delay(100);
+    HAL_Delay(500);
 
     UG_FillScreen(C_RED);
     clearTime();
     ST7789_PutStr(10, 10, "Filled Tri.", DEFAULT_FONT, C_YELLOW, C_RED);
     UG_FillTriangle(30, 40, 120, 40, 60, 120, C_WHITE);
     printTime();
-    HAL_Delay(100);
+    HAL_Delay(500);
 
     UG_FillScreen(C_BLACK);
     // Create the window
@@ -202,7 +202,7 @@ void ST7789_Test(void)
     clearTime();
     UG_Update();
     printTime();
-    HAL_Delay(100);
+    HAL_Delay(500);
     UG_WindowShow(&window_1); // Force update
     uint32_t time = HAL_GetTick() + 3000;
     uint8_t progress = 0;
@@ -223,7 +223,7 @@ void ST7789_Test(void)
     UG_FontSetTransparency(0);
     //<<-
 
-    HAL_Delay(100);
+    HAL_Delay(500);
 }
 
 void window_1_callback(UG_MESSAGE* msg)
