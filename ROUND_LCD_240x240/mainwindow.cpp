@@ -31,9 +31,9 @@ uint16_t R = 120;
 uint16_t K = 40;
 
 ArcProgressBar ark[] {
-    { 120, 120, static_cast<uint16_t>(R), static_cast<uint16_t>((R -= K) + 5) },
-    { 120, 120, static_cast<uint16_t>(R), static_cast<uint16_t>((R -= K) + 5) },
-    { 120, 120, static_cast<uint16_t>(R), static_cast<uint16_t>((R -= K) + 5) },
+    { 120, 120, R, uint16_t((R -= K) + 5) },
+    { 120, 120, R, uint16_t((R -= K) + 5) },
+    { 120, 120, R, uint16_t((R -= K) + 5) },
 };
 
 MainWindow::MainWindow(QWidget* parent)
