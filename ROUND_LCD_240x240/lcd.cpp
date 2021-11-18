@@ -107,30 +107,30 @@ DisplayItem::DisplayItem()
 
 Color DisplayItem::pixel(int x, int y) const
 {
-    return pixmap[x][y];
+    return pixmap.pixelColor(x, y);
 }
 
 void DisplayItem::setPixel(int x, int y, Color color)
 {
-    pixmap[x][y] = color;
+    pixmap.setPixelColor(x, y, color);
     update();
 }
 
 void DisplayItem::setPixel(int x, int y)
 {
-    pixmap[x][y] = currentColor_[index_];
+    pixmap.setPixelColor(x, y, currentColor_[index_]);
     update();
 }
 
 void DisplayItem::setPixel(PointU16 pt)
 {
-    pixmap[pt.x()][pt.y()] = currentColor_[index_];
+    pixmap.setPixelColor(pt.x(), pt.y(), currentColor_[index_]);
     update();
 }
 
 void DisplayItem::clear()
 {
-    pixmap = {};
+    pixmap.fill(Qt::black);
     update();
 }
 
@@ -139,7 +139,7 @@ void DisplayItem::drawHLine(uint16_t x, uint16_t y, uint8_t lenght)
     if (!lenght)
         return;
     while (lenght--)
-        pixmap[x++][y] = currentColor_[index_];
+        pixmap.setPixelColor(x++, y, currentColor_[index_]);
     update();
 }
 
@@ -148,7 +148,7 @@ void DisplayItem::drawVLine(uint16_t x, uint16_t y, uint8_t lenght)
     if (!lenght)
         return;
     while (lenght--)
-        pixmap[x][y++] = currentColor_[index_];
+        pixmap.setPixelColor(x, y++, currentColor_[index_]);
     update();
 }
 
@@ -156,7 +156,7 @@ void DisplayItem::fill(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, Color
 {
     for (int x { x1 }; x < x2; ++x)
         for (int y { x2 }; y < y2; ++y)
-            pixmap[x][y] = c;
+            pixmap.setPixelColor(x, y, c);
     update();
 }
 
@@ -168,17 +168,18 @@ QRectF DisplayItem::boundingRect() const
 void DisplayItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     //    painter->fillRect(size + QMargins { k, k, k, k }, Qt::transparent);
-    painter->translate(0.5, 0.5);
+    //    painter->translate(0.5, 0.5);
 
     painter->setPen(QColor(255, 127, 0));
-    for (int x = 0; x < size.width(); ++x) {
-        for (int y = 0; y < size.height(); ++y) {
-            painter->setPen(pixmap[x][y]);
-            //            if (pixmap[x][y] == QColor {})
-            painter->drawPoint(x, y);
-        }
-    }
-    painter->translate(-0.5, -0.5);
+    //    for (int x = 0; x < size.width(); ++x) {
+    //        for (int y = 0; y < size.height(); ++y) {
+    //            painter->setPen(pixmap[x][y]);
+    //            //            if (pixmap[x][y] == QColor {})
+    //            painter->drawPoint(x, y);
+    //        }
+    //    }
+    //    painter->translate(-0.5, -0.5);
+    painter->drawImage(pixmap.rect(), pixmap);
 
     if constexpr (1) { //border
         painter->setPen(QColor(127, 127, 127, 127));

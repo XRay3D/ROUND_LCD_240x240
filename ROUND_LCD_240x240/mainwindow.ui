@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QGraphicsView" name="graphicsView"/>
+     <widget class="GraphicsView" name="graphicsView"/>
     </item>
     <item>
      <widget class="QSlider" name="horizontalSlider">
@@ -98,6 +98,13 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>GraphicsView</class>
+   <extends>QGraphicsView</extends>
+   <header>graphicsview.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>horizontalSlider</tabstop>
   <tabstop>graphicsView</tabstop>

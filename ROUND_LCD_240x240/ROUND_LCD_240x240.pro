@@ -9,6 +9,7 @@ DEFINES += _USE_MATH_DEFINES=1
 
 SOURCES += \
     arcprogressbar.cpp \
+    graphicsview.cpp \
     lcd.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -17,6 +18,7 @@ SOURCES += \
 HEADERS += \
     arcprogressbar.h \
     circle.h \
+    graphicsview.h \
     lcd.h \
     line.h \
     mainwindow.h \

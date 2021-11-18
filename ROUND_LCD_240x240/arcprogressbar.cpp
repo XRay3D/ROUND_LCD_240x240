@@ -2,7 +2,8 @@
 
 float ArcProgressBar::map(float val) { return (val - min_) * (0 - -180) / (max_ - min_) + -180; }
 
-void ArcProgressBar::pie() {
+void ArcProgressBar::pie()
+{
     BresenhamCircle calc { radO };
     while (calc) {
         if (calc.y())
@@ -13,7 +14,8 @@ void ArcProgressBar::pie() {
     }
 }
 
-void ArcProgressBar::draw() {
+void ArcProgressBar::draw()
+{
     uint16_t buf[256] {};
     PointU16 o;
     PointU16 i;
@@ -108,14 +110,15 @@ void ArcProgressBar::draw() {
                 draw(calc.x(), calc.y());
             calc();
         }
-        LCD.setCurrentColor(Qt::green);
-        Line(i, o)();
+        //        LCD.setCurrentColor(Qt::green);
+        //        Line(i, o)();
     }
 }
 
 float ArcProgressBar::value() const { return value_; }
 
-void ArcProgressBar::setValue(float newValue) {
+void ArcProgressBar::setValue(float newValue)
+{
     value_ = newValue;
     draw();
 }

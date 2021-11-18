@@ -2,6 +2,7 @@
 
 #include "point.h"
 #include <QGraphicsItem>
+#include <QImage>
 #include <array>
 
 using Color = QColor;
@@ -38,7 +39,7 @@ public:
     void setCurrentColor(int index);
 
 private:
-    std::array<std::array<Color, Height>, Width> pixmap {};
+    QImage pixmap { Width, Height, QImage::Format_RGB888 };
     const QRect size { 0, 0, Width, Height };
 
     Color currentColor_[256];
