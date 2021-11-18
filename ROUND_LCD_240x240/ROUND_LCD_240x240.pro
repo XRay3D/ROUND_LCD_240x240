@@ -9,17 +9,21 @@ DEFINES += _USE_MATH_DEFINES=1
 
 SOURCES += \
     arcprogressbar.cpp \
+    graphicsview.cpp \
     lcd.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    test.c
 
 HEADERS += \
     arcprogressbar.h \
     circle.h \
+    graphicsview.h \
     lcd.h \
     line.h \
     mainwindow.h \
-    point.h
+    point.h \
+    test.h
 
 FORMS += \
     mainwindow.ui
@@ -28,3 +32,5 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+include(../ST7789-STM32-uGUI.pri)

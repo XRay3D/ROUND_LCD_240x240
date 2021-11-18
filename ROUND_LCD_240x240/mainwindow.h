@@ -22,15 +22,16 @@ private:
 
     void initArcs();
 
-    // QWidget interface
-protected:
-    void resizeEvent(QResizeEvent* event) override;
-
 private slots:
     void on_horizontalSlider_valueChanged(int value);
     void on_horizontalSlider_2_valueChanged(int value);
     void on_horizontalSlider_3_valueChanged(int value);
 
+    // QWidget interface
 protected:
+    void resizeEvent(QResizeEvent* event) override;
     void timerEvent(QTimerEvent* event) override;
+    void showEvent(QShowEvent* event) override;
 };
+
+
