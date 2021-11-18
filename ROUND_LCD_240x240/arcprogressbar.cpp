@@ -50,7 +50,9 @@ void ArcProgressBar::draw() {
                 const uint16_t len = x - arcInX[y];
 
                 auto drawCap = [len, &xOuter, yd, xCap = buf[yd], this]() {
-                    const uint16_t len2 = std::min<uint16_t>(xCap - xOuter + 1, len);
+                    uint16_t len2 {};
+                    if (xCap >= xOuter)
+                        len2 = std::min<uint16_t>(xCap - xOuter + 1, len);
                     LCD.setCurrentColor(valColorId_);
                     LCD.drawHLine(xOuter, yd, len2);
                     if (len >= len2) {
@@ -60,10 +62,10 @@ void ArcProgressBar::draw() {
                 };
 
                 if (outPt.x() < center.x()) { // left
-                    if (yd > inPt.y()) {
+                    /*  */ if (yd > inPt.y()) { // bot
                         LCD.setCurrentColor(valColorId_);
                         LCD.drawHLine(xOuter, yd, len);
-                    } else if (yd <= outPt.y()) {
+                    } else if (yd < outPt.y()) { // top
                         LCD.setCurrentColor(basColorId_);
                         LCD.drawHLine(xOuter, yd, len);
                     } else if (buf[yd] >= xOuter) {
@@ -76,13 +78,13 @@ void ArcProgressBar::draw() {
                     LCD.setCurrentColor(valColorId_);
                     LCD.drawHLine(xOuter, yd, len);
                     xOuter = center.x() + arcInX[y];
-                    if (yd < outPt.y()) {
+                    /*  */ if (yd < outPt.y()) { // top
                         LCD.setCurrentColor(valColorId_);
                         LCD.drawHLine(xOuter, yd, len);
-                    } else if (yd > inPt.y()) {
+                    } else if (yd > inPt.y()) { // bot
                         LCD.setCurrentColor(basColorId_);
                         LCD.drawHLine(xOuter, yd, len);
-                    } else if (buf[yd] >= xOuter) {
+                    } else { // if (buf[yd] >= xOuter) {
                         drawCap();
                     }
                 }
