@@ -2,7 +2,14 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-QMAKE_CXXFLAGS += /std:c++latest
+msvc:{
+    QMAKE_CXXFLAGS += /std:c++latest
+}
+
+gcc:{
+    #CONFIG  += c++17
+    QMAKE_CXXFLAGS += -std=c++1z
+}
 
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 DEFINES += _USE_MATH_DEFINES=1

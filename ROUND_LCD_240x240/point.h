@@ -1,7 +1,7 @@
 #pragma once
 
 #include <algorithm>
-#include <concepts>
+//#include <concepts>
 #include <stdint.h>
 
 constexpr static inline bool isNull(double d) {
@@ -39,10 +39,10 @@ constexpr static inline bool fuzzyIsNull(float f) {
     return abs_(f) <= 0.00001f;
 }
 
-template <std::integral T>
-constexpr inline int32_t round_(double d) { return d >= 0.0 ? T(d + 0.5) : T(d - double(T(d - 1)) + 0.5) + T(d - 1); }
-template <std::integral T>
-constexpr inline int32_t round_(float d) { return d >= 0.0f ? T(d + 0.5f) : T(d - float(T(d - 1)) + 0.5f) + T(d - 1); }
+template <class /*std::integral*/ T>
+constexpr inline T round_(double d) { return d >= 0.0 ? T(d + 0.5) : T(d - double(T(d - 1)) + 0.5) + T(d - 1); }
+template <class /*std::integral*/ T>
+constexpr inline T round_(float d) { return d >= 0.0f ? T(d + 0.5f) : T(d - float(T(d - 1)) + 0.5f) + T(d - 1); }
 
 /*************************************************/
 

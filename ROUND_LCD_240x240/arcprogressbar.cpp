@@ -1,4 +1,6 @@
 #include "arcprogressbar.h"
+#include <cmath>
+
 
 float ArcProgressBar::map(float val) { return (val - min_) * (0 - -180) / (max_ - min_) + -180; }
 

@@ -154,8 +154,8 @@ void DisplayItem::drawVLine(uint16_t x, uint16_t y, uint8_t lenght)
 
 void DisplayItem::fill(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, Color c)
 {
-    for (int x { x1 }; x < x2; ++x)
-        for (int y { x2 }; y < y2; ++y)
+    for (int x { x1 }; x <= x2; ++x)
+        for (int y { y1 }; y <= y2; ++y)
             pixmap.setPixelColor(x, y, c);
     update();
 }

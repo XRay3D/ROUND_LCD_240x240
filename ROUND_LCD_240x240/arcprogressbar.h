@@ -11,15 +11,16 @@ class ArcProgressBar {
     float min_ {};
     float max_ { 1.f };
     float value_ {};
-    float map(float val);
     uint8_t valColorId_;
     uint8_t basColorId_;
 
+    float map(float val);
+
 public:
-    constexpr ArcProgressBar(uint16_t X, uint16_t Y, uint16_t Radius, uint16_t Radius2)
+    ArcProgressBar(uint16_t X, uint16_t Y, uint16_t Radius, uint16_t Width)
         : center { X, Y }
         , radO { Radius }
-        , radI { Radius2 } {
+        , radI { Radius -= Width } {
     }
 
     void pie();
