@@ -1,0 +1,2 @@
+TEMPLATE = subdirs
+SUBDIRS += ROUND_LCD_240x240
