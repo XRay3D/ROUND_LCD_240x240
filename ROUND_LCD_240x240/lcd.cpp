@@ -167,18 +167,6 @@ QRectF DisplayItem::boundingRect() const
 
 void DisplayItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
-    //    painter->fillRect(size + QMargins { k, k, k, k }, Qt::transparent);
-    //    painter->translate(0.5, 0.5);
-
-    painter->setPen(QColor(255, 127, 0));
-    //    for (int x = 0; x < size.width(); ++x) {
-    //        for (int y = 0; y < size.height(); ++y) {
-    //            painter->setPen(pixmap[x][y]);
-    //            //            if (pixmap[x][y] == QColor {})
-    //            painter->drawPoint(x, y);
-    //        }
-    //    }
-    //    painter->translate(-0.5, -0.5);
     painter->drawImage(pixmap.rect(), pixmap);
 
     if constexpr (1) { //border
@@ -186,6 +174,7 @@ void DisplayItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
         painter->drawRect(size + QMarginsF { k, k, k, k });
         painter->drawEllipse(size + QMarginsF { k, k, k, k });
     }
+
     if constexpr (0) { //grid
         painter->setPen({ QColor(127, 127, 127, 127), 0.0 });
         for (int x = 0; x < size.width(); ++x)
