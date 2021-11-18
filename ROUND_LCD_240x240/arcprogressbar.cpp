@@ -1,11 +1,9 @@
 #include "arcprogressbar.h"
 #include <cmath>
 
-
 float ArcProgressBar::map(float val) { return (val - min_) * (0 - -180) / (max_ - min_) + -180; }
 
-void ArcProgressBar::pie()
-{
+void ArcProgressBar::pie() {
     BresenhamCircle calc { radO };
     while (calc) {
         if (calc.y())
@@ -16,22 +14,21 @@ void ArcProgressBar::pie()
     }
 }
 
-void ArcProgressBar::draw()
-{
+void ArcProgressBar::draw() {
     uint16_t buf[256] {};
-    PointU16 o;
-    PointU16 i;
+    PointU16 outPt;
+    PointU16 inPt;
     {
         auto val = map(value_);
-        auto sin_ = sin(val * (M_PI / 180));
-        auto cos_ = cos(val * (M_PI / 180));
-        o.rx() = center.x() + cos_ * radO;
-        o.ry() = center.y() + sin_ * radO;
-        i.rx() = center.x() + cos_ * radI;
-        i.ry() = center.y() + sin_ * radI;
+        auto sin_ = sin(val * (M_PI / 180.));
+        auto cos_ = cos(val * (M_PI / 180.));
+        outPt.rx() = center.x() + cos_ * radO;
+        outPt.ry() = center.y() + sin_ * radO;
+        inPt.rx() = center.x() + cos_ * radI;
+        inPt.ry() = center.y() + sin_ * radI;
     }
 
-    Line(i, o)(buf);
+    Line(inPt, outPt)(buf);
 
     if (!radI) {
         pie();
@@ -47,60 +44,62 @@ void ArcProgressBar::draw()
         }
         calc = { radO };
         auto draw = [&](uint16_t x, uint16_t y) {
-            uint16_t xd = center.x() - x, yd = center.y() - y;
+            uint16_t xOuter = center.x() - x, yd = center.y() - y;
             if (y <= radI) {
+
                 const uint16_t len = x - arcInX[y];
-                auto drawCap = [len, &xd, yd, X = buf[yd], this]() {
-                    const uint16_t len2 = X - xd;
+
+                auto drawCap = [len, &xOuter, yd, xCap = buf[yd], this]() {
+                    const uint16_t len2 = std::min<uint16_t>(xCap - xOuter + 1, len);
                     LCD.setCurrentColor(valColorId_);
-                    LCD.drawHLine(xd, yd, len2);
-                    if (len > len2) {
+                    LCD.drawHLine(xOuter, yd, len2);
+                    if (len >= len2) {
                         LCD.setCurrentColor(basColorId_);
-                        LCD.drawHLine(xd + len2, yd, len - len2);
+                        LCD.drawHLine(xOuter + len2, yd, len - len2);
                     }
                 };
 
-                if (o.x() < center.x()) {
-                    if (yd >= i.y()) {
+                if (outPt.x() < center.x()) { // left
+                    if (yd > inPt.y()) {
                         LCD.setCurrentColor(valColorId_);
-                        LCD.drawHLine(xd, yd, len);
-                    } else if (yd <= o.y()) {
+                        LCD.drawHLine(xOuter, yd, len);
+                    } else if (yd <= outPt.y()) {
                         LCD.setCurrentColor(basColorId_);
-                        LCD.drawHLine(xd, yd, len);
-                    } else if (buf[yd] >= xd) {
+                        LCD.drawHLine(xOuter, yd, len);
+                    } else if (buf[yd] >= xOuter) {
                         drawCap();
                     }
-                    xd = center.x() + arcInX[y];
+                    xOuter = center.x() + arcInX[y];
                     LCD.setCurrentColor(basColorId_);
-                    LCD.drawHLine(xd, yd, len);
-                } else {
+                    LCD.drawHLine(xOuter, yd, len);
+                } else { //rigth
                     LCD.setCurrentColor(valColorId_);
-                    LCD.drawHLine(xd, yd, len);
-                    xd = center.x() + arcInX[y];
-                    if (yd < o.y()) {
+                    LCD.drawHLine(xOuter, yd, len);
+                    xOuter = center.x() + arcInX[y];
+                    if (yd < outPt.y()) {
                         LCD.setCurrentColor(valColorId_);
-                        LCD.drawHLine(xd, yd, len);
-                    } else if (yd >= i.y()) {
+                        LCD.drawHLine(xOuter, yd, len);
+                    } else if (yd > inPt.y()) {
                         LCD.setCurrentColor(basColorId_);
-                        LCD.drawHLine(xd, yd, len);
-                    } else if (buf[yd] > xd) {
+                        LCD.drawHLine(xOuter, yd, len);
+                    } else if (buf[yd] >= xOuter) {
                         drawCap();
                     }
                 }
             } else { // top arc without inner
                 x *= 2;
-                if (o.y() > yd) {
-                    LCD.setCurrentColor(o.x() < center.x() ? basColorId_ : valColorId_);
-                    LCD.drawHLine(xd, yd, x);
-                } else if (buf[yd] > xd) {
-                    uint16_t len = std::min<uint16_t>(buf[yd] - xd, x);
+                if (outPt.y() > yd) {
+                    LCD.setCurrentColor(outPt.x() < center.x() ? basColorId_ : valColorId_);
+                    LCD.drawHLine(xOuter, yd, x);
+                } else if (buf[yd] > xOuter) {
+                    uint16_t len = std::min<uint16_t>(buf[yd] - xOuter + 1, x);
                     LCD.setCurrentColor(valColorId_);
-                    LCD.drawHLine(xd, yd, len);
+                    LCD.drawHLine(xOuter, yd, len);
                     LCD.setCurrentColor(basColorId_);
-                    LCD.drawHLine(xd + len, yd, x - len);
+                    LCD.drawHLine(xOuter + len, yd, x - len);
                 } else {
                     LCD.setCurrentColor(basColorId_);
-                    LCD.drawHLine(xd, yd, x);
+                    LCD.drawHLine(xOuter, yd, x);
                 }
             }
         };
@@ -112,15 +111,17 @@ void ArcProgressBar::draw()
                 draw(calc.x(), calc.y());
             calc();
         }
-        //        LCD.setCurrentColor(Qt::green);
-        //        Line(i, o)();
+        if (1) {
+            LCDDBG dbg(1);
+            LCD.setCurrentColor(10, { 0, 255, 0, 128 });
+            Line(inPt, outPt)();
+        }
     }
 }
 
 float ArcProgressBar::value() const { return value_; }
 
-void ArcProgressBar::setValue(float newValue)
-{
+void ArcProgressBar::setValue(float newValue) {
     value_ = newValue;
     draw();
 }

@@ -38,8 +38,14 @@ public:
     void setCurrentColor(int index, const Color& newCurrentColor);
     void setCurrentColor(int index);
 
+    void setDbg(bool fl) { pixmap = &(fl ? pixmapDbg : pixmapLcd); }
+
 private:
-    QImage pixmap { Width, Height, QImage::Format_RGB888 };
+    QImage pixmapLcd { Width, Height, QImage::Format_RGB888 };
+    QImage pixmapDbg { Width, Height, QImage::Format_RGBA8888 };
+
+    QImage* pixmap = &pixmapLcd;
+
     const QRect size { 0, 0, Width, Height };
 
     Color currentColor_[256];
@@ -47,3 +53,12 @@ private:
 };
 
 inline DisplayItem LCD;
+
+struct LCDDBG {
+    LCDDBG(bool clear) {
+        LCD.setDbg(1);
+        if (clear)
+            LCD.clear();
+    }
+    ~LCDDBG() { LCD.setDbg(0); }
+};
