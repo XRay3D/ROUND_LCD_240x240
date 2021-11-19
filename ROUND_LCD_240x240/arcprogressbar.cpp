@@ -16,8 +16,8 @@ void ArcProgressBar::pie() {
 
 void ArcProgressBar::draw() {
     uint16_t buf[256] {};
-    PointU16 outPt;
-    PointU16 inPt;
+    PointS16 outPt;
+    PointS16 inPt;
     {
         auto val = map(value_);
         auto sin_ = sin(val * (M_PI / 180.));
@@ -26,9 +26,17 @@ void ArcProgressBar::draw() {
         outPt.ry() = center.y() + sin_ * radO;
         inPt.rx() = center.x() + cos_ * radI;
         inPt.ry() = center.y() + sin_ * radI;
+        float scale;
+        auto delta = inPt - outPt;
+        scale = delta.x() / float(delta.y());
+        qDebug() << delta;
+        qDebug("%f", scale);
+        LCDDBG dbg(1);
+        for (int y = 0; y <= delta.y(); ++y) {
+            buf[outPt.y() + y] = outPt.x() + y * scale;
+            LCD.setPixel(buf[outPt.y() + y], outPt.y() + y, { 0, 255, 0, 200 });
+        }
     }
-
-    Line(inPt, outPt)(buf);
 
     if (!radI) {
         pie();
@@ -65,7 +73,7 @@ void ArcProgressBar::draw() {
                     /*  */ if (yd > inPt.y()) { // bot
                         LCD.setCurrentColor(valColorId_);
                         LCD.drawHLine(xOuter, yd, len);
-                    } else if (yd < outPt.y()) { // top
+                    } else if (yd <= outPt.y()) { // top
                         LCD.setCurrentColor(basColorId_);
                         LCD.drawHLine(xOuter, yd, len);
                     } else if (buf[yd] >= xOuter) {
@@ -112,11 +120,6 @@ void ArcProgressBar::draw() {
             if (calc.x())
                 draw(calc.x(), calc.y());
             calc();
-        }
-        if (1) {
-            LCDDBG dbg(1);
-            LCD.setCurrentColor(10, { 0, 255, 0, 128 });
-            Line(inPt, outPt)();
         }
     }
 }

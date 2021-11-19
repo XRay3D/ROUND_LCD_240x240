@@ -15,9 +15,9 @@ public:
         : p1 { p1 }
         , p2 { p2 } { }
 
-    void operator()(uint16_t* buf = {}) { draw(buf); }
+    void operator()() { draw(); }
 
-    void draw(uint16_t* buf = {}) {
+    void draw() {
 
         int16_t deltax = abs(p2.x() - p1.x()); /* The difference between the x's */
         int16_t deltay = abs(p2.y() - p1.y()); /* The difference between the y's */
@@ -67,10 +67,8 @@ public:
         }
 
         for (int16_t curpixel = 0; curpixel <= numpixels; curpixel++) {
-            if (buf) // && (!buf[y] || fl))
-                buf[y] = x;
-            else
-                LCD.setPixel(x, y); /* Draw the current pixel */
+
+            LCD.setPixel(x, y); /* Draw the current pixel */
             num += numadd; /* Increase the numerator by the top of the fraction */
             if (num >= den) /* Check if numerator >= denominator */
             {

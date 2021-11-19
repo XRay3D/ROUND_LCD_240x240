@@ -2,6 +2,7 @@
 
 #include <algorithm>
 //#include <concepts>
+#include <QDebug>
 #include <stdint.h>
 
 constexpr static inline bool isNull(double d) {
@@ -48,6 +49,7 @@ constexpr inline T round_(float d) { return d >= 0.0f ? T(d + 0.5f) : T(d - floa
 
 template <class T>
 class Point {
+
 public:
     constexpr Point();
     constexpr Point(T xpos, T ypos);
@@ -82,18 +84,21 @@ public:
     friend constexpr inline bool operator==(const Point<U>&, const Point<W>&);
     template <class U, class W>
     friend constexpr inline bool operator!=(const Point<U>&, const Point<W>&);
-    template <class U, class W>
-    friend constexpr inline const Point<std::common_type_t<U, T>> operator+(const Point<U>&, const Point<W>&);
-    template <class U, class W>
-    friend constexpr inline const Point<std::common_type_t<U, T>> operator-(const Point<U>&, const Point<W>&);
+
+    template <class U>
+    friend constexpr inline Point<U> operator+(const Point<U>&, const Point<U>&);
+    template <class U>
+    friend constexpr inline Point<U> operator-(const Point<U>&, const Point<U>&);
+
     template <class U>
     friend constexpr inline const Point<T> operator*(U, const Point<T>&);
     template <class U>
     friend constexpr inline const Point<T> operator*(const Point<T>&, U);
     template <class U>
     friend constexpr inline const Point<T> operator+(const Point<U>&);
-    template <class U>
-    friend constexpr inline const Point<T> operator-(const Point<U>&);
+
+    friend constexpr inline const Point<T> operator-(const Point<T>&);
+
     template <class U>
     friend constexpr inline const Point<T> operator/(const Point<T>&, U);
     template <class U>
@@ -194,14 +199,14 @@ constexpr inline bool operator!=(const Point<U>& p1, const Point<W>& p2) {
     return !(p1 == p2);
 }
 
-template <class U, class W>
-constexpr inline const Point<std::common_type_t<U, W>> operator+(const Point<U>& p1, const Point<W>& p2) {
+template <class T>
+constexpr inline Point<T> operator+(const Point<T>& p1, const Point<T>& p2) {
     return Point(p1.xp + p2.xp, p1.yp + p2.yp);
 }
 
-template <class U, class W>
-constexpr inline const Point<std::common_type_t<U, W>> operator-(const Point<U>& p1, const Point<W>& p2) {
-    return Point(p1.xp - p2.xp, p1.yp - p2.yp);
+template <class T>
+constexpr inline Point<T> operator-(const Point<T>& p1, const Point<T>& p2) {
+    return { T(p1.xp - p2.xp), T(p1.yp - p2.yp) };
 }
 
 template <class T, class U>
@@ -219,10 +224,19 @@ constexpr inline const Point<T> operator+(const Point<U>& p) {
     return p;
 }
 
-template <class T, class U>
-constexpr inline const Point<T> operator-(const Point<U>& p) {
+template <class T>
+constexpr inline const Point<T> operator-(const Point<T>& p) {
     return Point(-p.xp, -p.yp);
 }
+
+//template <class T>
+//constexpr inline Point<T> operator-(const Point<T>& p1, const Point<T>& p2) {
+//    return Point<T>(p1.xp - p2.xp, p1.yp - p2.yp);
+//}
+//template <class T>
+//constexpr inline const Point<T> operator-(const Point<T>& p1, const Point<T>& p2) {
+//    return Point<T>(p1.xp - p2.xp, p1.yp - p2.yp);
+//}
 
 template <class T>
 template <class U>
@@ -246,3 +260,10 @@ constexpr inline Point<U> Point<T>::toPoint() const {
 }
 
 using PointU16 = Point<uint16_t>;
+using PointS16 = Point<int16_t>;
+
+template <class T>
+QDebug operator<<(QDebug dbg, const Point<T>& pt) {
+    dbg << "Point{" << pt.x() << "," << pt.y() << "}";
+    return dbg;
+}

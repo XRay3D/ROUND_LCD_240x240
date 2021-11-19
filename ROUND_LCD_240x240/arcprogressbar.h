@@ -4,6 +4,17 @@
 #include "lcd.h"
 #include "line.h"
 
+struct ArcProgressBarAbstr {
+    virtual uint16_t radO() const = 0;
+    virtual uint16_t radI() const = 0;
+};
+
+template <uint16_t RadO, uint16_t RadI>
+struct ArcProgressBarPar final : ArcProgressBarAbstr {
+    uint16_t radO() const override { return RadO; };
+    uint16_t radI() const override { return RadI; };
+};
+
 class ArcProgressBar {
     PointU16 center;
     const uint16_t radO; //Radius Outer
