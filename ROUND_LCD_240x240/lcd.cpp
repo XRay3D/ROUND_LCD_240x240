@@ -148,28 +148,12 @@ QRectF DisplayItem::boundingRect() const {
 
 void DisplayItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/) {
     painter->drawImage(pixmapLcd.rect(), pixmapLcd);
-    //    auto cm = painter->compositionMode();
-    //    painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
     painter->drawImage(pixmapDbg.rect(), pixmapDbg);
-    //    painter->setCompositionMode(cm);
-
-    //    for (int x = 0; x < size.width(); ++x)
-    //        painter->drawLine(x, 0, x, size.height());
-    //    for (int y = 0; y < size.height(); ++y)
-    //        painter->drawLine(0, y, size.width(), y);
 
     if constexpr (1) { //border
         painter->setPen(QColor(127, 127, 127, 127));
         painter->drawRect(size + QMarginsF { k, k, k, k });
         painter->drawEllipse(size + QMarginsF { k, k, k, k });
-    }
-
-    if constexpr (0) { //grid
-        painter->setPen({ QColor(127, 127, 127, 127), 0.0 });
-        for (int x = 0; x < size.width(); ++x)
-            painter->drawLine(x, 0, x, size.height());
-        for (int y = 0; y < size.height(); ++y)
-            painter->drawLine(0, y, size.width(), y);
     }
 }
 
