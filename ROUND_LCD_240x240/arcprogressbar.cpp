@@ -15,33 +15,36 @@ void ArcProgressBar::pie() {
 }
 
 void ArcProgressBar::draw() {
-    uint16_t buf[256] {};
+    uint16_t buf[std::max(LCD.Width, LCD.Height)] {};
     PointS16 outPt;
     PointS16 inPt;
     {
         auto val = map(value_);
         auto sin_ = sin(val * (M_PI / 180.));
         auto cos_ = cos(val * (M_PI / 180.));
-        outPt.rx() = center.x() + cos_ * radO;
-        outPt.ry() = center.y() + sin_ * radO;
-        inPt.rx() = center.x() + cos_ * radI;
-        inPt.ry() = center.y() + sin_ * radI;
+        outPt = Point(center.x() + cos_ * radO, center.y() + sin_ * radO);
+        inPt = Point(center.x() + cos_ * radI, center.y() + sin_ * radI);
         float scale;
         auto delta = inPt - outPt;
-        scale = delta.x() / float(delta.y());
-        qDebug() << delta;
-        qDebug("%f", scale);
-        LCDDBG dbg(1);
-        for (int y = 0; y <= delta.y(); ++y) {
-            buf[outPt.y() + y] = outPt.x() + y * scale;
-            LCD.setPixel(buf[outPt.y() + y], outPt.y() + y, { 0, 255, 0, 200 });
+        if (delta.y()) {
+            scale = delta.x() / float(delta.y());
+            qDebug() << delta;
+            qDebug("%f", scale);
+            LCDDBG dbg(1);
+            for (int y = 0; y <= delta.y(); ++y) {
+                buf[outPt.y() + y] = outPt.x() + y * scale;
+                LCD.setPixel(buf[outPt.y() + y], outPt.y() + y, { 0, 255, 0, 200 });
+            }
+        } else {
+            buf[outPt.y()] = std::max(inPt.x(), outPt.x());
+            LCD.setPixel(buf[outPt.y()], outPt.y(), { 0, 255, 0, 200 });
         }
     }
 
     if (!radI) {
         pie();
     } else {
-        uint16_t arcInX[256] {};
+        uint16_t arcInX[std::max(LCD.Width, LCD.Height)] {};
         BresenhamCircle calc { radI };
         while (calc) {
             if (calc.y())

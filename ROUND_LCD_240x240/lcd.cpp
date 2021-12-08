@@ -19,7 +19,9 @@ Color toColor(UG_COLOR c) {
             unsigned g : 6;
             unsigned r : 5;
         };
-    } comp { .c = c };
+    } comp;
+    comp.c = c;
+
 #pragma pack(pop)
     return Color(comp.r << 3, comp.g << 2, comp.b << 3);
 }
@@ -75,10 +77,17 @@ void DrawPixel(int16_t x, int16_t y, uint16_t color) {
 }
 
 UG_DEVICE device {
+#if __cplusplus < 202000
+    DisplayItem::Width,
+        DisplayItem::Height,
+        DrawPixel,
+        nullptr,
+#else
     .x_dim = DisplayItem::Width,
     .y_dim = DisplayItem::Height,
     .pset = DrawPixel,
     .flush = nullptr,
+#endif
 };
 
 UG_GUI gui {};

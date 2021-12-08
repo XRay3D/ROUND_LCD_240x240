@@ -5,21 +5,21 @@
 #include <QDebug>
 #include <stdint.h>
 
-constexpr static inline bool isNull(double d) {
-    union {
-        double d;
-        uint64_t u;
-    } val { .d = d };
-    return (val.u & uint64_t(0x7fffffffffffffff)) == 0;
-}
+//constexpr static inline bool isNull(double d) {
+//    union {
+//        double d;
+//        uint64_t u;
+//    } val { .d = d };
+//    return (val.u & uint64_t(0x7fffffffffffffff)) == 0;
+//}
 
-constexpr static inline bool isNull(float f) {
-    union {
-        float f;
-        uint32_t u;
-    } val { .f = f };
-    return (val.u & uint32_t(0x7fffffff)) == 0;
-}
+//constexpr static inline bool isNull(float f) {
+//    union {
+//        float f;
+//        uint32_t u;
+//    } val { .f = f };
+//    return (val.u & uint32_t(0x7fffffff)) == 0;
+//}
 
 template <class T>
 constexpr T abs_(T val) { return val < 0 ? -val : +val; }
@@ -53,10 +53,17 @@ class Point {
 public:
     constexpr Point();
     constexpr Point(T xpos, T ypos);
-    //    template <class U>
-    //    constexpr Point(const Point<U>& p)
-    //        : xp(p.x())
-    //        , yp(p.y()) { }
+
+    template <class U>
+    constexpr Point(const Point<U>& p)
+        : xp(p.x())
+        , yp(p.y()) { }
+
+    //    template <class W>
+    //    constexpr Point(const Point<std::enable_if_t<std::is_final_v<W>, W>>& p)
+    //        : xp(round_<T>(p.x()))
+    //        , yp(round_<T>(p.y())) { }
+
     constexpr inline T manhattanLength() const;
 
     inline bool isNull() const;
