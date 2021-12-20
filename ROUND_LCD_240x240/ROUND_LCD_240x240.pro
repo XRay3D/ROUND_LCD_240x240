@@ -21,7 +21,8 @@ SOURCES += \
     lcd.cpp \
     main.cpp \
     mainwindow.cpp \
-    test.c
+    test.c \
+    testwindow.cpp
 
 HEADERS += \
     arcprogressbar.h \
@@ -31,7 +32,8 @@ HEADERS += \
     line.h \
     mainwindow.h \
     point.h \
-    test.h
+    test.h \
+    testwindow.h
 
 FORMS += \
     mainwindow.ui
