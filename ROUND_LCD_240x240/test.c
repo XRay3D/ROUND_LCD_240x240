@@ -45,7 +45,7 @@ void ST7789_PutStr(uint16_t x, uint16_t y, char* str, UG_FONT* font, uint16_t co
 
 void ST7789_Test(void)
 {
-    UG_FillScreen(C_WHITE);
+    /*  UG_FillScreen(C_WHITE);
     ST7789_PutStr(10, 10, "Starting Test", DEFAULT_FONT, C_RED, C_WHITE);
     HAL_Delay(500);
 
@@ -165,7 +165,7 @@ void ST7789_Test(void)
     UG_FillTriangle(30, 40, 120, 40, 60, 120, C_WHITE);
     printTime();
     HAL_Delay(500);
-
+*/
     UG_FillScreen(C_BLACK);
     // Create the window
     UG_WindowCreate(&window_1, obj_buff_wnd_1, MAX_OBJECTS, window_1_callback);
@@ -190,7 +190,7 @@ void ST7789_Test(void)
     UG_TextboxCreate(&window_1, &textbox_1, TXB_ID_0, 10, 40, 200, 65);
     UG_TextboxSetFont(&window_1, TXB_ID_0, DEFAULT_FONT);
     UG_TextboxSetText(&window_1, TXB_ID_0, "Some Text");
-    UG_TextboxSetBackColor(&window_1, TXB_ID_0, C_LIGHT_YELLOW);
+    //    UG_TextboxSetBackColor(&window_1, TXB_ID_0, C_LIGHT_YELLOW);
     UG_TextboxSetForeColor(&window_1, TXB_ID_0, C_BLACK);
     UG_TextboxSetAlignment(&window_1, TXB_ID_0, ALIGN_CENTER);
 

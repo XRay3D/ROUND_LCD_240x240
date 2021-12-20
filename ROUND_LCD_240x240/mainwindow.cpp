@@ -3,6 +3,7 @@
 #include "circle.h"
 #include "lcd.h"
 #include "test.h"
+#include "testwindow.h"
 #include "ui_mainwindow.h"
 
 #include <QAction>
@@ -15,7 +16,10 @@
 #include <cmath>
 #include <random>
 
-extern "C" uint32_t HAL_GetTick() {
+TestWindow testWindow;
+
+extern "C" uint32_t HAL_GetTick()
+{
     return QTime::currentTime().msecsSinceStartOfDay();
 }
 
@@ -37,7 +41,8 @@ ArcProgressBar ark[] {
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow) {
+    , ui(new Ui::MainWindow)
+{
     ui->setupUi(this);
 
     connect(new QShortcut(Qt::Key_A, this), &QShortcut::activated, [this] { ui->hslArc1->setValue(ui->hslArc1->value() - 1); }); // NOTE debug without mouse ;-)
@@ -65,35 +70,43 @@ MainWindow::MainWindow(QWidget* parent)
     //QTimer::singleShot(100, this, ST7789_Test);
 
     connect(ui->pbTest, &QAbstractButton::clicked, ST7789_Test);
+    connect(ui->pushButton, &QAbstractButton::clicked, [] {
+        testWindow.show();
+    });
 
     connect(ui->hslArc1, &QAbstractSlider::valueChanged, [](int value) { ark[0].setValue(value); });
     connect(ui->hslArc2, &QAbstractSlider::valueChanged, [](int value) { ark[1].setValue(value); });
     connect(ui->hslArc3, &QAbstractSlider::valueChanged, [](int value) { ark[2].setValue(value); });
 
     //startTimer(1);
+    testWindow.show();
 }
 
-MainWindow::~MainWindow() {
+MainWindow::~MainWindow()
+{
     ui->graphicsView->scene()->removeItem(&LCD); // NOTE because scene aftyer destroy delete LCD item alocatet on stack.
     saveSettings();
     delete ui;
 }
 
-void MainWindow::saveSettings() {
+void MainWindow::saveSettings()
+{
     QSettings settings;
     settings.beginGroup("MainWindow");
     settings.setValue("Geometry", saveGeometry());
     settings.setValue("State", saveState());
 }
 
-void MainWindow::loadSettings() {
+void MainWindow::loadSettings()
+{
     QSettings settings;
     settings.beginGroup("MainWindow");
     restoreGeometry(settings.value("Geometry").toByteArray());
     restoreState(settings.value("State").toByteArray());
 }
 
-void MainWindow::initArcs() {
+void MainWindow::initArcs()
+{
     LCD.setCurrentColor(1, Qt::red);
     LCD.setCurrentColor(2, Qt::green);
     LCD.setCurrentColor(3, Qt::blue);
@@ -109,7 +122,8 @@ void MainWindow::initArcs() {
     }
 }
 
-void MainWindow::timerEvent(QTimerEvent* /*event*/) {
+void MainWindow::timerEvent(QTimerEvent* /*event*/)
+{
     LCD.clear();
     ui->hslArc1->setValue((ui->hslArc1->value() + 1) % 180);
     // static std::default_random_engine e1({});
@@ -123,12 +137,14 @@ void MainWindow::timerEvent(QTimerEvent* /*event*/) {
     // ark[2].setValue(int(ark[0].value() + 3) % 180);
 }
 
-void MainWindow::resizeEvent(QResizeEvent* event) {
+void MainWindow::resizeEvent(QResizeEvent* event)
+{
     QMainWindow::resizeEvent(event);
     ui->graphicsView->zoomFit();
 }
 
-void MainWindow::showEvent(QShowEvent* event) {
+void MainWindow::showEvent(QShowEvent* event)
+{
     QMainWindow::showEvent(event);
     ui->graphicsView->zoomFit();
 }
