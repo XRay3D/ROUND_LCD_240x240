@@ -1,5 +1,12 @@
 #include "graphicsview.h"
 
+#include <QMouseEvent>
+
+extern "C" {
+#include "ugui.h"
+#undef swap
+} // extern "C"
+
 constexpr auto inScaleFactor { 1.5 };
 constexpr auto outScaleFactor { 1 / inScaleFactor };
 
@@ -9,6 +16,9 @@ GraphicsView::GraphicsView(QWidget* parent)
     setScene(new QGraphicsScene());
     scene()->addItem(&LCD);
     scene()->setBackgroundBrush(Qt::black);
+    setInteractive(true);
+    setMouseTracking(true);
+    setTabletTracking(true);
 }
 
 void GraphicsView::zoomFit() { fitInView(scene()->items().front(), Qt::KeepAspectRatio); }
@@ -49,12 +59,18 @@ void GraphicsView::mousePressEvent(QMouseEvent* event)
 {
     setDragMode(ScrollHandDrag);
     QGraphicsView::mousePressEvent(event);
+    auto pt { mapToScene(event->pos()).toPoint() };
+    UG_TouchUpdate(std::clamp(pt.rx(), 0, 799), std::clamp(pt.ry(), 0, 479), 1);
+    UG_Update();
 }
 
 void GraphicsView::mouseReleaseEvent(QMouseEvent* event)
 {
     QGraphicsView::mouseReleaseEvent(event);
     setDragMode(NoDrag);
+    auto pt { mapToScene(event->pos()).toPoint() };
+    UG_TouchUpdate(std::clamp(pt.rx(), 0, 799), std::clamp(pt.ry(), 0, 479), 0);
+    UG_Update();
 }
 
 //void GraphicsView::mouseDoubleClickEvent(QMouseEvent* event)
@@ -62,7 +78,10 @@ void GraphicsView::mouseReleaseEvent(QMouseEvent* event)
 //    QGraphicsView::mouseDoubleClickEvent(event);
 //}
 
-//void GraphicsView::mouseMoveEvent(QMouseEvent* event)
-//{
-//    QGraphicsView::mouseMoveEvent(event);
-//}
+void GraphicsView::mouseMoveEvent(QMouseEvent* event)
+{
+    QGraphicsView::mouseMoveEvent(event);
+    auto pt { mapToScene(event->pos()).toPoint() };
+    UG_TouchUpdate(std::clamp(pt.rx(), 0, 799), std::clamp(pt.ry(), 0, 479), UG_GetGUI()->touch.state);
+    UG_Update();
+}

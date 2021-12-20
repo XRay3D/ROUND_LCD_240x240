@@ -21,8 +21,8 @@ protected:
     void drawForeground(QPainter* painter, const QRectF& rect) override;
 
     // QWidget interface
-        void mousePressEvent(QMouseEvent *event) override;
-        void mouseReleaseEvent(QMouseEvent *event) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
     //    void mouseDoubleClickEvent(QMouseEvent *event) override;
-    //    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
 };
