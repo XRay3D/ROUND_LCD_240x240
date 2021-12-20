@@ -157,12 +157,12 @@ QRectF DisplayItem::boundingRect() const {
 
 void DisplayItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/) {
     painter->drawImage(pixmapLcd.rect(), pixmapLcd);
-    painter->drawImage(pixmapDbg.rect(), pixmapDbg);
+//    painter->drawImage(pixmapDbg.rect(), pixmapDbg);
 
     if constexpr (1) { //border
         painter->setPen(QColor(127, 127, 127, 127));
         painter->drawRect(size + QMarginsF { k, k, k, k });
-        painter->drawEllipse(size + QMarginsF { k, k, k, k });
+//        painter->drawEllipse(size + QMarginsF { k, k, k, k });
     }
 }
 

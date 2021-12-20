@@ -10,8 +10,8 @@ using Color = QColor;
 class DisplayItem : public QGraphicsItem {
 public:
     enum {
-        Width = 240,
-        Height = 240
+        Width = 800,
+        Height = 480
     };
 
     explicit DisplayItem();
