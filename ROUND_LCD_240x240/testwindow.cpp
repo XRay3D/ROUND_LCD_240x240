@@ -17,13 +17,14 @@ QDebug operator<<(QDebug debug, const UG_MESSAGE& msg)
 void TestWindow::callback(UG_MESSAGE* msg)
 {
     qDebug() << *msg;
+    UG_Button b;
     if (msg->type == MSG_TYPE_OBJECT) {
         if (msg->id == OBJ_TYPE_BUTTON) {
             if (msg->event == OBJ_EVENT_PRESSED) {
                 switch (msg->sub_id) {
                 case BTN_ID_0: {
                     //                    LED4_Write(0);
-                    UG_ButtonHide(&window_1, BTN_ID_1);
+                    b.Hide(&window_1, BTN_ID_1);
                     break;
                 }
                 case BTN_ID_1: {
@@ -32,7 +33,7 @@ void TestWindow::callback(UG_MESSAGE* msg)
                 }
                 case BTN_ID_2: {
                     //                    LED4_Write(1);
-                    UG_ButtonShow(&window_1, BTN_ID_1);
+                    b.Show(&window_1, BTN_ID_1);
                     break;
                 }
                 case BTN_ID_3: {
@@ -95,16 +96,16 @@ TestWindow::TestWindow()
         { w + 20, y += h + 10 },
 
     };
-
+    UG_Button b;
     for (auto& bt : buttons) {
         // Create Buttons
-        UG_ButtonCreate(&window_1, &bt, idCounter, btPos[idCounter].x, btPos[idCounter].y, btPos[idCounter].x + w, btPos[idCounter].y + h);
+        b.Create(&window_1, &bt, idCounter, btPos[idCounter].x, btPos[idCounter].y, btPos[idCounter].x + w, btPos[idCounter].y + h);
 
         //Label Buttons
-        UG_ButtonSetFont(&window_1, idCounter, DEFAULT_FONT);
-        UG_ButtonSetForeColor(&window_1, idCounter, C_BLACK);
-        UG_ButtonSetBackColor(&window_1, idCounter, C_LIGHT_GRAY);
-        UG_ButtonSetText(&window_1, idCounter, btNames[idCounter].data());
+        b.SetFont(&window_1, idCounter, DEFAULT_FONT);
+        b.SetForeColor(&window_1, idCounter, C_BLACK);
+        b.SetBackColor(&window_1, idCounter, C_LIGHT_GRAY);
+        b.SetText(&window_1, idCounter, btNames[idCounter].data());
         ++idCounter;
         x += w, y += h;
     }
@@ -113,7 +114,7 @@ TestWindow::TestWindow()
     auto rt = UG_TextboxCreate(&window_1, &textbox_1, textbox_1id, 400, 200, 200, 100);
     rt = UG_TextboxSetFont(&window_1, textbox_1id, DEFAULT_FONT);
     rt = UG_TextboxSetText(&window_1, textbox_1id, "Some Text");
-//    rt = UG_TextboxSetBackColor(&window_1, textbox_1id, C_MAROON);
+    //    rt = UG_TextboxSetBackColor(&window_1, textbox_1id, C_MAROON);
     rt = UG_TextboxSetForeColor(&window_1, textbox_1id, C_BLACK);
     rt = UG_TextboxSetAlignment(&window_1, textbox_1id, ALIGN_CENTER);
 }

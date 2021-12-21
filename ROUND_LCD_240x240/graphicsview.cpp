@@ -2,10 +2,7 @@
 
 #include <QMouseEvent>
 
-extern "C" {
 #include "ugui.h"
-#undef swap
-} // extern "C"
 
 constexpr auto inScaleFactor { 1.5 };
 constexpr auto outScaleFactor { 1 / inScaleFactor };

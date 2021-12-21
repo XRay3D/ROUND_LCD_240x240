@@ -3,14 +3,13 @@
 #include <span>
 #include <string_view>
 
-extern "C" {
 #include "ugui.h"
-#undef swap
+
+extern "C" {
 extern uint32_t HAL_GetTick();
 extern void HAL_Delay(uint32_t d);
-} // extern "C"
-
 #define DEFAULT_FONT FONT_arial_20X23 //FONT_12X20
+} // extern "C"
 
 class TestWindow {
 
@@ -19,7 +18,7 @@ class TestWindow {
         WIDTH = 800,
         HEIGHT = 480
     };
-    static inline UG_OBJECT obj_buff_wnd_1[MAX_OBJECTS ];
+    static inline UG_OBJECT obj_buff_wnd_1[MAX_OBJECTS];
     static inline UG_WINDOW window_1 { .style = WND_STYLE_2D };
     static inline UG_TEXTBOX textbox_1 = { .style = WND_STYLE_3D };
     static inline int textbox_1id;
@@ -37,8 +36,6 @@ class TestWindow {
         { .style = WND_STYLE_2D },
         { .style = WND_STYLE_2D },
     };
-
-
 
     static inline std::string_view btNames[10] {
         { "Butt 1" },

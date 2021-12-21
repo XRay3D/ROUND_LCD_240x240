@@ -3,14 +3,12 @@
 #include <QDebug>
 #include <QPainter>
 
-extern "C" {
 #include "ugui.h"
-#undef swap
-} // extern "C"
 
 constexpr auto k = 0.5;
 
-Color toColor(UG_COLOR c) {
+Color toColor(UG_COLOR c)
+{
 #pragma pack(push, 1)
     union {
         UG_COLOR c;
@@ -26,7 +24,8 @@ Color toColor(UG_COLOR c) {
     return Color(comp.r << 3, comp.g << 2, comp.b << 3);
 }
 
-UG_RESULT DrawLine(UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2, UG_COLOR c) {
+UG_RESULT DrawLine(UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2, UG_COLOR c)
+{
     x1 > x2 ? std::swap(x1, x2) : void();
     y1 > y2 ? std::swap(y1, y2) : void();
     LCD.setCurrentColor(0, toColor(c));
@@ -43,7 +42,8 @@ UG_RESULT DrawLine(UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2, UG_COLOR c) {
 UG_S16 XB, XE, YB, YE;
 UG_S16 X, Y;
 
-void pushPixels(UG_U16 count, UG_COLOR color) {
+void pushPixels(UG_U16 count, UG_COLOR color)
+{
     auto c = toColor(color);
     while (count--) {
         LCD.setPixel(X, Y, c);
@@ -55,28 +55,33 @@ void pushPixels(UG_U16 count, UG_COLOR color) {
     }
 }
 
-auto Fill(UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2, UG_COLOR c) {
+auto Fill(UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2, UG_COLOR c)
+{
     LCD.fill(x1, y1, x2, y2, toColor(c));
     return pushPixels;
 }
 
-auto FillArea(UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2) {
+auto FillArea(UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2)
+{
     X = XB = x1, XE = x2, Y = YB = y1, YE = y2;
     return pushPixels;
 }
 
-void DrawImage(UG_S16 x1, UG_S16 y1, UG_BMP* bmp) {
+void DrawImage(UG_S16 x1, UG_S16 y1, UG_BMP* bmp)
+{
     UG_COLOR* c = (UG_COLOR*)bmp->p;
     for (int y {}; y < bmp->height; ++y)
         for (int x {}; x < bmp->width; ++x)
             LCD.setPixel(x1 + x, y1 + y, toColor(*c++));
 }
 
-void DrawPixel(int16_t x, int16_t y, uint16_t color) {
+void DrawPixel(int16_t x, int16_t y, uint16_t color)
+{
     LCD.setPixel(x, y, toColor(color));
 }
 
-UG_DEVICE device {
+UG_DEVICE device
+{
 #if __cplusplus < 202000
     DisplayItem::Width,
         DisplayItem::Height,
@@ -93,7 +98,8 @@ UG_DEVICE device {
 UG_GUI gui {};
 
 DisplayItem::DisplayItem()
-    : QGraphicsItem() {
+    : QGraphicsItem()
+{
     UG_Init(&gui, &device);
     UG_DriverRegister(DRIVER_DRAW_LINE, (void*)DrawLine);
     UG_DriverRegister(DRIVER_FILL_FRAME, (void*)Fill);
@@ -104,31 +110,37 @@ DisplayItem::DisplayItem()
     clear();
 }
 
-Color DisplayItem::pixel(int x, int y) const {
+Color DisplayItem::pixel(int x, int y) const
+{
     return pixmap->pixelColor(x, y);
 }
 
-void DisplayItem::setPixel(int x, int y, Color color) {
+void DisplayItem::setPixel(int x, int y, Color color)
+{
     pixmap->setPixelColor(x, y, color);
     update();
 }
 
-void DisplayItem::setPixel(int x, int y) {
+void DisplayItem::setPixel(int x, int y)
+{
     pixmap->setPixelColor(x, y, currentColor_[index_]);
     update();
 }
 
-void DisplayItem::setPixel(PointU16 pt) {
+void DisplayItem::setPixel(PointU16 pt)
+{
     pixmap->setPixelColor(pt.x(), pt.y(), currentColor_[index_]);
     update();
 }
 
-void DisplayItem::clear() {
+void DisplayItem::clear()
+{
     pixmap->fill(pixmap == &pixmapLcd ? Qt::black : Qt::transparent);
     update();
 }
 
-void DisplayItem::drawHLine(uint16_t x, uint16_t y, uint8_t lenght) { //NOTE DMA frendly
+void DisplayItem::drawHLine(uint16_t x, uint16_t y, uint8_t lenght)
+{ //NOTE DMA frendly
     if (!lenght)
         return;
     while (lenght--)
@@ -136,7 +148,8 @@ void DisplayItem::drawHLine(uint16_t x, uint16_t y, uint8_t lenght) { //NOTE DMA
     update();
 }
 
-void DisplayItem::drawVLine(uint16_t x, uint16_t y, uint8_t lenght) { //NOTE DMA frendly
+void DisplayItem::drawVLine(uint16_t x, uint16_t y, uint8_t lenght)
+{ //NOTE DMA frendly
     if (!lenght)
         return;
     while (lenght--)
@@ -144,32 +157,37 @@ void DisplayItem::drawVLine(uint16_t x, uint16_t y, uint8_t lenght) { //NOTE DMA
     update();
 }
 
-void DisplayItem::fill(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, Color c) {
+void DisplayItem::fill(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, Color c)
+{
     for (int x { x1 }; x <= x2; ++x)
         for (int y { y1 }; y <= y2; ++y)
             pixmap->setPixelColor(x, y, c);
     update();
 }
 
-QRectF DisplayItem::boundingRect() const {
+QRectF DisplayItem::boundingRect() const
+{
     return size + QMarginsF { k, k, k, k };
 }
 
-void DisplayItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/) {
+void DisplayItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
+{
     painter->drawImage(pixmapLcd.rect(), pixmapLcd);
-//    painter->drawImage(pixmapDbg.rect(), pixmapDbg);
+    //    painter->drawImage(pixmapDbg.rect(), pixmapDbg);
 
     if constexpr (1) { //border
         painter->setPen(QColor(127, 127, 127, 127));
         painter->drawRect(size + QMarginsF { k, k, k, k });
-//        painter->drawEllipse(size + QMarginsF { k, k, k, k });
+        //        painter->drawEllipse(size + QMarginsF { k, k, k, k });
     }
 }
 
-void DisplayItem::setCurrentColor(int index, const Color& newCurrentColor) {
+void DisplayItem::setCurrentColor(int index, const Color& newCurrentColor)
+{
     currentColor_[index_ = index] = newCurrentColor;
 }
 
-void DisplayItem::setCurrentColor(int index) {
+void DisplayItem::setCurrentColor(int index)
+{
     index_ = index;
 }
