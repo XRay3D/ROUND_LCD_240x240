@@ -233,7 +233,6 @@ QRectF DisplayItem::boundingRect() const {
 }
 
 void DisplayItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/) {
-    painter->translate(0.5, 0.5);
     painter->drawImage(pixmapLcd.rect(), pixmapLcd);
     //    painter->drawImage(pixmapDbg.rect(), pixmapDbg);
 
