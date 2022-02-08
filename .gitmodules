@@ -1,3 +1,6 @@
 [submodule "ST7789-STM32-uGUI"]
 	path = ST7789-STM32-uGUI
 	url = git@github.com:deividAlfa/ST7789-STM32-uGUI.git
+[submodule "lvgl"]
+	path = lvgl
+	url = https://github.com/lvgl/lvgl.git

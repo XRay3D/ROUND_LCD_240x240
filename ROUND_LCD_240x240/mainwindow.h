@@ -19,7 +19,7 @@ private:
     Ui::MainWindow* ui;
     void saveSettings();
     void loadSettings();
-    void initArcs();
+
 
 protected:
     void resizeEvent(QResizeEvent* event) override;

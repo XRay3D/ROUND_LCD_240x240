@@ -1,6 +1,5 @@
 #pragma once
 
-#include "point.h"
 #include <QGraphicsItem>
 #include <QImage>
 #include <array>
@@ -21,7 +20,6 @@ public:
     void setPixel(int x, int y, Color color);
 
     void setPixel(int x, int y);
-    void setPixel(PointU16 pt);
 
     void clear();
 
@@ -40,7 +38,7 @@ public:
 
     void setDbg(bool fl) { pixmap = &(fl ? pixmapDbg : pixmapLcd); }
 
-private:
+    //private:
     QImage pixmapLcd { Width, Height, QImage::Format_RGB888 };
     QImage pixmapDbg { Width, Height, QImage::Format_RGBA8888 };
 
